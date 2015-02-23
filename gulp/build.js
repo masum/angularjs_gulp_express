@@ -20,7 +20,7 @@ var $ = require('gulp-load-plugins')({
  */
 gulp.task('partials', function () {
   return gulp.src([
-    paths.src + '/{app,components}/**/*.html',
+    paths.client + '/{app,components}/**/*.html',
     paths.tmp + '/{app,components}/**/*.html'
   ])
   .pipe($.minifyHtml({
@@ -48,7 +48,10 @@ gulp.task('html', ['inject', 'partials'], function () {
     addRootSlash: false
   };
 
-  var assets;
+  //var assets;
+  //var assets = $.useref.assets({searchPath: ['.tmp', 'app']});
+  //var assets = $.useref.assets({searchPath: paths.client + '/assets/images/*.png'});
+  var assets = $.useref.assets();
 
   return gulp.src(
     paths.tmp + '/serve/*.html'
@@ -58,7 +61,8 @@ gulp.task('html', ['inject', 'partials'], function () {
   .pipe($.inject(partialsInjectFile, partialsInjectOptions))
 
   // ストリームの対象をassetsに変更
-  .pipe(assets = $.useref.assets())
+  //.pipe(assets = $.useref.assets())
+  .pipe(assets)
 
   // ファイル名にmd5の暗号化文字列を８文字付加
   .pipe($.rev())
@@ -99,7 +103,7 @@ gulp.task('html', ['inject', 'partials'], function () {
  *  imagesフォルダ内の画像ファイルをdistにコピーする
  */
 gulp.task('images', function () {
-  return gulp.src(paths.src + '/assets/images/**/*')
+  return gulp.src(paths.client + '/assets/images/**/*')
     .pipe(gulp.dest(paths.dist + '/assets/images/'));
 });
 
@@ -119,7 +123,7 @@ gulp.task('fonts', function () {
  * アイコンフィ有るをdistへコピーする
  */
 gulp.task('misc', function () {
-  return gulp.src(paths.src + '/**/*.ico')
+  return gulp.src(paths.client + '/**/*.ico')
     .pipe(gulp.dest(paths.dist + '/'));
 });
 

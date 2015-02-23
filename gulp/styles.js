@@ -12,15 +12,15 @@ var $ = require('gulp-load-plugins')();
 gulp.task('styles', function () {
 
   var injectFiles = gulp.src([
-    paths.src + '/{app,components}/**/*.styl',
-    '!' + paths.src + '/app/index.styl',
-    '!' + paths.src + '/app/vendor.styl'
+    paths.client + '/{app,components}/**/*.styl',
+    '!' + paths.client + '/app/index.styl',
+    '!' + paths.client + '/app/vendor.styl'
   ], { read: false });
 
   var injectOptions = {
     transform: function(filePath) {
-      filePath = filePath.replace(paths.src + '/app/', '');
-      filePath = filePath.replace(paths.src + '/components/', '../components/');
+      filePath = filePath.replace(paths.client + '/app/', '');
+      filePath = filePath.replace(paths.client + '/components/', '../components/');
       return '@import \'' + filePath + '\';';
     },
     starttag: '// injector',
@@ -31,8 +31,8 @@ gulp.task('styles', function () {
   var indexFilter = $.filter('index.styl');
 
   return gulp.src([
-    paths.src + '/app/index.styl',
-    paths.src + '/app/vendor.styl'
+    paths.client + '/app/index.styl',
+    paths.client + '/app/vendor.styl'
   ])
     .pipe(indexFilter)
     .pipe($.inject(injectFiles, injectOptions))

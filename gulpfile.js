@@ -7,7 +7,7 @@ var gulp = require('gulp');
  * @type {{src: string, dist: string, tmp: string, e2e: string}}
  */
 gulp.paths = {
-  src: 'src',
+  client: 'client',
   dist: 'dist',
   tmp: '.tmp',
   e2e: 'e2e'

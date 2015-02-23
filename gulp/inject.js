@@ -16,13 +16,13 @@ gulp.task('inject', ['styles'], function () {
   ], { read: false });
 
   var injectScripts = gulp.src([
-    paths.src + '/{app,components}/**/*.js',
-    '!' + paths.src + '/{app,components}/**/*.spec.js',
-    '!' + paths.src + '/{app,components}/**/*.mock.js'
+    paths.client + '/{app,components}/**/*.js',
+    '!' + paths.client + '/{app,components}/**/*.spec.js',
+    '!' + paths.client + '/{app,components}/**/*.mock.js'
   ]).pipe($.angularFilesort());
 
   var injectOptions = {
-    ignorePath: [paths.src, paths.tmp + '/serve'],
+    ignorePath: [paths.client, paths.tmp + '/serve'],
     addRootSlash: false
   };
 
@@ -34,7 +34,8 @@ gulp.task('inject', ['styles'], function () {
     exclude: [/bootstrap\.js/, /bootstrap\.css/, /bootstrap\.css/, /foundation\.css/]
   };
 
-  return gulp.src(paths.src + '/*.html')
+  console.log("a");
+  return gulp.src(paths.client + '/*.html')
     .pipe($.inject(injectStyles, injectOptions))  // 依存するCSSファイルを注入
     .pipe($.inject(injectScripts, injectOptions)) // 依存するJSファイルを注入
     .pipe(wiredep(wiredepOptions))                // 依存するBowerファイルを注入
