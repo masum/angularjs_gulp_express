@@ -9,6 +9,7 @@ var gulp = require('gulp');
 gulp.paths = {
   client: 'client',
   dist: 'dist',
+  server: 'server',
   tmp: '.tmp',
   e2e: 'e2e'
 };

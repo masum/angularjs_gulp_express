@@ -5,12 +5,19 @@ var gulp = require('gulp');
 var paths = gulp.paths;
 
 var util = require('util');
-
 var browserSync = require('browser-sync');
-
 var middleware = require('./proxy');
+var livereload = require('gulp-livereload');
+var nodemon = require('gulp-nodemon');
+var server = require('gulp-express')
 
-function browserSyncInit(baseDir, files, browser) {
+/**
+ * サーバー処理および、クライアント処理の実行
+ * @param baseDir
+ * @param files
+ * @param browser
+ */
+function syncClient(baseDir, files, browser) {
   browser = browser === undefined ? 'default' : browser;
 
   var routes = null;
@@ -31,8 +38,28 @@ function browserSyncInit(baseDir, files, browser) {
   });
 }
 
-gulp.task('serve', ['watch'], function () {
-  browserSyncInit([
+
+/**
+ * 「express」タスク
+ */
+gulp.task('express', function() {
+  livereload.listen();
+
+  nodemon({
+    script: paths.server + '/bin/www',
+    ext: 'html js css',
+    ignore: ['ignored.js', 'node_modules', 'bower_components'] })
+    .on('start', function () {
+      console.log('started!');
+      livereload.changed();
+    });
+});
+
+/**
+ * 「serve」タスク
+ */
+gulp.task('serve', ['express', 'watch'], function () {
+  syncClient([
     paths.tmp + '/serve',
     paths.client
   ], [
@@ -45,14 +72,23 @@ gulp.task('serve', ['watch'], function () {
   ]);
 });
 
+/**
+ * 「serve:dist」タスク
+ */
 gulp.task('serve:dist', ['build'], function () {
-  browserSyncInit(paths.dist);
+  syncClient(paths.dist);
 });
 
+/**
+ * 「serve:e2e」タスク
+ */
 gulp.task('serve:e2e', ['inject'], function () {
-  browserSyncInit([paths.tmp + '/serve', paths.client], null, []);
+  syncClient([paths.tmp + '/serve', paths.client], null, []);
 });
 
+/**
+ * 「serve:e2e-dist」タスク
+ */
 gulp.task('serve:e2e-dist', ['build'], function () {
-  browserSyncInit(paths.dist, null, []);
+  syncClient(paths.dist, null, []);
 });

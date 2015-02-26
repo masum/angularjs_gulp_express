@@ -2,6 +2,9 @@
   "name": "systemFactoryService",
   "version": "0.0.0",
   "dependencies": {},
+  "scripts": {
+    "start": "node ./bin/www"
+  },
   "devDependencies": {
     "browser-sync": "~1.7.1",
     "chalk": "~0.5.1",
@@ -13,15 +16,18 @@
     "gulp-consolidate": "~0.1.2",
     "gulp-csso": "~0.2.9",
     "gulp-debug": "^2.0.0",
+    "gulp-express": "^0.1.13",
     "gulp-filter": "~1.0.2",
     "gulp-flatten": "~0.0.4",
     "gulp-if": "^1.2.5",
     "gulp-inject": "~1.0.2",
     "gulp-jshint": "~1.9.0",
     "gulp-karma": "~0.0.4",
+    "gulp-livereload": "^3.8.0",
     "gulp-load-plugins": "~0.7.1",
     "gulp-minify-html": "~0.1.7",
     "gulp-ng-annotate": "~0.3.6",
+    "gulp-nodemon": "^1.0.5",
     "gulp-protractor": "~0.0.11",
     "gulp-rename": "~1.2.0",
     "gulp-replace": "~0.5.0",
@@ -39,7 +45,11 @@
     "protractor": "~1.4.0",
     "require-dir": "~0.1.0",
     "uglify-save-license": "~0.4.1",
-    "wiredep": "~2.2.0"
+    "wiredep": "~2.2.0",
+    "express": "~4.11.1",
+    "express-resource": "^1.0.0",
+    "debug": "~2.1.1",
+    "jade": "~1.9.1"
   },
   "engines": {
     "node": ">=0.10.0"

@@ -92,10 +92,19 @@ gulp.task('html', ['inject', 'partials'], function () {
   })))
 
   // distへコピー
-  .pipe(gulp.dest(paths.dist + '/'))
+  .pipe(gulp.dest(paths.dist + '/public/'))
 
   // ファイルのサイズを出力
-  .pipe($.size({ title: paths.dist + '/', showFiles: true }));
+  .pipe($.size({ title: paths.dist + '/public/', showFiles: true }));
+});
+
+/**
+ * 「web」タスク
+ *  サーバーアプリをdistにコピーする
+ */
+gulp.task('web', function () {
+  return gulp.src(paths.server + '/**/*')
+    .pipe(gulp.dest(paths.dist + '/server/'));
 });
 
 /**
@@ -104,7 +113,7 @@ gulp.task('html', ['inject', 'partials'], function () {
  */
 gulp.task('images', function () {
   return gulp.src(paths.client + '/assets/images/**/*')
-    .pipe(gulp.dest(paths.dist + '/assets/images/'));
+    .pipe(gulp.dest(paths.dist + '/public/assets/images/'));
 });
 
 /**
@@ -115,7 +124,7 @@ gulp.task('fonts', function () {
   return gulp.src($.mainBowerFiles())
     .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
     .pipe($.flatten())
-    .pipe(gulp.dest(paths.dist + '/fonts/'));
+    .pipe(gulp.dest(paths.dist + '/public/fonts/'));
 });
 
 /**
@@ -124,7 +133,7 @@ gulp.task('fonts', function () {
  */
 gulp.task('misc', function () {
   return gulp.src(paths.client + '/**/*.ico')
-    .pipe(gulp.dest(paths.dist + '/'));
+    .pipe(gulp.dest(paths.dist + '/public'));
 });
 
 /**
@@ -138,4 +147,4 @@ gulp.task('clean', function (done) {
 /**
  * 「build」タスク
  */
-gulp.task('build', ['html', 'images', 'fonts', 'misc']);
+gulp.task('build', ['html', 'web', 'images', 'fonts', 'misc']);
