@@ -11,7 +11,13 @@ var paths = gulp.paths;
  * node_modulee配下のGulpプラグインをすべて読み込み、$.xxx へ割り当てる
  */
 var $ = require('gulp-load-plugins')({
-  pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
+  pattern: [
+    'gulp-*',
+    'main-bower-files',
+    'uglify-save-license',
+    'del',
+    'jshint-stylish'
+  ]
 });
 
 /**
@@ -35,6 +41,16 @@ gulp.task('partials', function () {
 });
 
 /**
+ * 「lint」タスク
+ */
+gulp.task('lint', function() {
+  return gulp.src([paths.client + '/**/*.js', paths.server + '/**/*.js'])
+    .pipe($.jshint())
+    .pipe($.jshint.reporter('jshint-stylish'))
+    //.pipe($.jshint.reporter('fail'));
+});
+
+/**
  * 「html」タスク
  */
 gulp.task('html', ['inject', 'partials'], function () {
@@ -48,54 +64,49 @@ gulp.task('html', ['inject', 'partials'], function () {
     addRootSlash: false
   };
 
-  //var assets;
-  //var assets = $.useref.assets({searchPath: ['.tmp', 'app']});
-  //var assets = $.useref.assets({searchPath: paths.client + '/assets/images/*.png'});
   var assets = $.useref.assets();
 
-  return gulp.src(
-    paths.tmp + '/serve/*.html'
-  )
+  return gulp.src(paths.tmp + '/serve/*.html')
 
-  // partialsタスクでまとめられたキャッシュJSファイルを注入
-  .pipe($.inject(partialsInjectFile, partialsInjectOptions))
+    // partialsタスクでまとめられたキャッシュJSファイルを注入
+    .pipe($.inject(partialsInjectFile, partialsInjectOptions))
 
-  // ストリームの対象をassetsに変更
-  //.pipe(assets = $.useref.assets())
-  .pipe(assets)
+    // ストリームの対象をassetsに変更
+    //.pipe(assets = $.useref.assets())
+    .pipe(assets)
 
-  // ファイル名にmd5の暗号化文字列を８文字付加
-  .pipe($.rev())
+    // ファイル名にmd5の暗号化文字列を８文字付加
+    .pipe($.rev())
 
-  .pipe($.if('*.js', $.ngAnnotate()))
+    .pipe($.if('*.js', $.ngAnnotate()))
 
-  // JSを圧縮
-  .pipe($.if('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
+    // JSを圧縮
+    .pipe($.if('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
 
-  // CSSを圧縮
-  .pipe($.if('*.css', $.csso()))
+    // CSSを圧縮
+    .pipe($.if('*.css', $.csso()))
 
-  // ストリームの対象を戻す
-  .pipe(assets.restore())
+    // ストリームの対象を戻す
+    .pipe(assets.restore())
 
-  // HTML内のcssやjs読み込みを1つにまとめる
-  .pipe($.useref())
+    // HTML内のcssやjs読み込みを1つにまとめる
+    .pipe($.useref())
 
-  // app.js などの名前を app-xxxxx.js という名前に置換
-  .pipe($.revReplace())
+    // app.js などの名前を app-xxxxx.js という名前に置換
+    .pipe($.revReplace())
 
-  // HTMLファイルを軽量化
-  .pipe($.if('*.html', $.minifyHtml({
-    empty: true, // do not remove empty attributes
-    spare: true, // do not remove redundant attributes
-    quotes: true // do not remove arbitrary quotes
-  })))
+    // HTMLファイルを軽量化
+    .pipe($.if('*.html', $.minifyHtml({
+      empty: true, // do not remove empty attributes
+      spare: true, // do not remove redundant attributes
+      quotes: true // do not remove arbitrary quotes
+    })))
 
-  // distへコピー
-  .pipe(gulp.dest(paths.dist + '/public/'))
+    // distへコピー
+    .pipe(gulp.dest(paths.dist + '/public/'))
 
-  // ファイルのサイズを出力
-  .pipe($.size({ title: paths.dist + '/public/', showFiles: true }));
+    // ファイルのサイズを出力
+    .pipe($.size({ title: paths.dist + '/public/', showFiles: true }));
 });
 
 /**
@@ -104,6 +115,11 @@ gulp.task('html', ['inject', 'partials'], function () {
  */
 gulp.task('web', function () {
   return gulp.src(paths.server + '/**/*')
+    // JSを圧縮
+    .pipe($.if('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
+    // CSSを圧縮
+    .pipe($.if('*.css', $.csso()))
+
     .pipe(gulp.dest(paths.dist + '/server/'));
 });
 
@@ -147,4 +163,4 @@ gulp.task('clean', function (done) {
 /**
  * 「build」タスク
  */
-gulp.task('build', ['html', 'web', 'images', 'fonts', 'misc']);
+gulp.task('build', ['html', 'lint', 'web', 'images', 'fonts', 'misc']);

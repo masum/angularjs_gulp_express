@@ -34,7 +34,6 @@ gulp.task('inject', ['styles'], function () {
     exclude: [/bootstrap\.js/, /bootstrap\.css/, /bootstrap\.css/, /foundation\.css/]
   };
 
-  console.log("a");
   return gulp.src(paths.client + '/*.html')
     .pipe($.inject(injectStyles, injectOptions))  // 依存するCSSファイルを注入
     .pipe($.inject(injectScripts, injectOptions)) // 依存するJSファイルを注入

@@ -1,23 +1,88 @@
-module.exports = {
-   index: function(req, res){
-    res.send("index: called as GET method");
-  }
-  ,new: function(req, res){
-    res.send("new: called as GET method");
-  }
-  ,create: function(req, res){
-    res.send("create: called as POST method");
-  }
-  ,show: function(req, res){
-    res.send("show: called as GET method");
-  }
-  ,edit: function(req, res){
-    res.send("edit: called as GET method");
-  }
-  ,update: function(req, res){
-    res.send("update: called as PUT method");
-  }
-  ,destroy: function(req, res){
-    res.send("destroy: called as DELETE method");
-  }
+var app = {};
+
+/**
+ * GET /users
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.index = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
 };
+
+/**
+ * GET /users/new
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.new = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
+};
+
+/**
+ * POST /users
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.create = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
+};
+
+/**
+ * GET /users/:id
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.show = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
+};
+
+/**
+ * GET / /users/:id/edit
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.edit = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
+};
+
+/**
+ * PUT /users/:id
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.update = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
+};
+
+/**
+ * DELETE /users/:id
+ * @param req Request Object
+ * @param res Response Object
+ */
+app.destroy = function(req, res){
+  var users = {
+    id: 'hoge'
+  };
+  res.json(users);
+};
+
+module.exports = app;
+
